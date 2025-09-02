@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Students Evaluation - ZSCMST</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="page active">
+        <div class="login-container">
+            <div class="header-content">
+                <h1>ZAMBOANGA STATE COLLEGE OF MARINE SCIENCES AND TECHNOLOGY</h1>
+                
+                <div class="logo-container">
+                    <img src="public/image/logo1.jpg" alt="ZSCMST Logo" class="logo-img">
+                    <img src="public/image/logo2.jpg" alt="CELA Logo" class="logo-img">
+                </div>
+
+                <h2>DIGITAL STUDENTS EVALUATION</h2>
+            </div>
+
+            <div class="login-form-container">
+                <h3>LOG IN</h3>
+                
+                <div id="errorMessage" class="error-message" style="display: none;"></div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <input type="text" id="username" placeholder="Username" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" id="loginBtn">LOG IN</button>
+                </form>
+
+                <div class="demo-credentials">
+                    <strong>Demo Credentials:</strong><br/>
+                    Username: admin | Password: admin123<br/>
+                    Username: faculty | Password: faculty123
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboardPage" class="page">
+        <div class="header">
+            <div class="container">
+                <div class="header-flex">
+                    <div>
+                        <h1>Digital Students Evaluation System</h1>
+                        <p>Zamboanga State College of Marine Sciences and Technology</p>
+                    </div>
+                    <div class="header-actions">
+                        <span id="welcomeMessage">Welcome, User!</span>
+                        <button onclick="logout()" class="btn btn-logout">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="folder-grid">
+                <div class="folder-card" onclick="showYearFolders()">
+                    <div class="folder-icon">📁</div>
+                    <h3>Student Records</h3>
+                    <p>Browse students by academic year and manage their profiles</p>
+                </div>
+
+                <div class="folder-card" onclick="showResults()">
+                    <div class="folder-icon">📊</div>
+                    <h3>Evaluation Results</h3>
+                    <p>View processed results and academic standing status</p>
+                </div>
+
+                <div class="folder-card processing-card">
+                    <div class="folder-icon">⚙️</div>
+                    <h3>Automated Processing</h3>
+                    <p>Bulk process grades and generate reports</p>
+                    <small>Click the processing icon in student lists</small>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>System Overview</h2>
+                <div class="overview-grid">
+                    <div class="overview-card input-card">
+                        <h3>INPUT</h3>
+                        <p>• Student Profiles</p>
+                        <p>• Final Grades</p>
+                        <p>• Academic Standing Rules</p>
+                    </div>
+                    
+                    <div class="overview-card process-card">
+                        <h3>PROCESS</h3>
+                        <p>• Calculate GPA</p>
+                        <p>• Compare against retention criteria</p>
+                        <p>• Apply academic rules</p>
+                    </div>
+                    
+                    <div class="overview-card output-card">
+                        <h3>OUTPUT</h3>
+                        <p>• Passed Students</p>
+                        <p>• Retained Students</p>
+                        <p>• Dismissed Students</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Academic Standing Rules (CELA)</h2>
+                <div class="rules-grid">
+                    <div class="rule-card passed">
+                        <h4>PASSED</h4>
+                        <p>GPA ≤ 2.25</p>
+                        <small>Excellent to Satisfactory</small>
+                    </div>
+                    <div class="rule-card retained">
+                        <h4>RETAINED</h4>
+                        <p>2.25 < GPA ≤ 2.50</p>
+                        <small>Different major option</small>
+                    </div>
+                    <div class="rule-card dismissed">
+                        <h4>DISMISSED</h4>
+                        <p>GPA > 2.50</p>
+                        <small>No longer in CELA</small>
+                    </div>
+                    <div class="rule-card deans-list" style="background: #fff3cd; color: #856404; border: 2px solid #ffc107;">
+                        <h4>🏆 DEAN'S LIST</h4>
+                        <p>GPA ≤ 1.80</p>
+                        <small>Exceptional Academic Performance</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Year Folders Page -->
+    <div id="yearFoldersPage" class="page">
+        <div class="header">
+            <div class="container">
+                <div class="header-flex">
+                    <div>
+                        <h1>Student Records by Academic Year</h1>
+                        <p>Select an academic year to view student records</p>
+                    </div>
+                    <div class="header-actions">
+                        <button onclick="showDashboard()" class="btn btn-back">← Dashboard</button>
+                        <span id="welcomeMessage2">Welcome, User!</span>
+                        <button onclick="logout()" class="btn btn-logout">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="search-container">
+                <input type="text" placeholder="🔍 Search academic years..." class="search-bar">
+            </div>
+
+            <div class="processing-info">
+                <div class="processing-icon">💻</div>
+                <p><strong>THIS ICON IS FOR THE PROCESS (AUTOMATED EVALUATION/CALCULATION) OF GRADES TO INPUT.</strong></p>
+            </div>
+
+            <div class="folder-grid">
+                <div class="folder-card" onclick="showStudentList('2022-2023')">
+                    <div class="folder-icon">
+                        <img src="public/image/logo1.jpg" alt="ZSCMST Logo" class="year-logo-img">
+                    </div>
+                    <h3>2022-2023</h3>
+                    <p>Academic Year 2022-2023</p>
+                    <div class="click-info">Click to view students</div>
+                </div>
+
+                <div class="folder-card" onclick="showStudentList('2023-2024')">
+                    <div class="folder-icon">
+                        <img src="public/image/logo1.jpg" alt="ZSCMST Logo" class="year-logo-img">
+                    </div>
+                    <h3>2023-2024</h3>
+                    <p>Academic Year 2023-2024</p>
+                    <div class="click-info">Click to view students</div>
+                </div>
+
+                <div class="folder-card" onclick="showStudentList('2024-2025')">
+                    <div class="folder-icon">
+                        <img src="public/image/logo1.jpg" alt="ZSCMST Logo" class="year-logo-img">
+                    </div>
+                    <h3>2024-2025</h3>
+                    <p>Academic Year 2024-2025</p>
+                    <div class="click-info">Click to view students</div>
+                </div>
+
+                <div class="folder-card" onclick="showStudentList('2025-2026')">
+                    <div class="folder-icon">
+                        <img src="public/image/logo1.jpg" alt="ZSCMST Logo" class="year-logo-img">
+                    </div>
+                    <h3>2025-2026</h3>
+                    <p>Academic Year 2025-2026</p>
+                    <div class="click-info">Click to view students</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student List Page -->
+    <div id="studentListPage" class="page">
+        <div class="header">
+            <div class="container">
+                <div class="header-flex">
+                    <div>
+                        <h1 id="studentListTitle">Students - Academic Year</h1>
+                        <p>Manage student records and evaluations</p>
+                    </div>
+                    <div class="header-actions">
+                        <button onclick="showYearFolders()" class="btn btn-back">← Back to Years</button>
+                        <span id="welcomeMessage3">Welcome, User!</span>
+                        <button onclick="logout()" class="btn btn-logout">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="search-process-container">
+                <input type="text" id="studentSearch" placeholder="🔍 Search students by name, ID, or year level..." class="search-bar">
+                <button onclick="processAllStudents()" class="btn btn-warning">💻 Process All Grades</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>STUDENT RECORDS</h2>
+                    <div id="studentCount" class="student-count">Found 0 student(s)</div>
+                </div>
+
+                <div id="studentTableContainer">
+                    <!-- Student table will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div id="summaryCard" class="card" style="display: none;">
+                <h3>Academic Standing Summary</h3>
+                <div class="summary-grid">
+                    <div class="summary-item passed">
+                        <h2 id="passedCount">0</h2>
+                        <p>Passed</p>
+                    </div>
+                    <div class="summary-item retained">
+                        <h2 id="retainedCount">0</h2>
+                        <p>Retained</p>
+                    </div>
+                    <div class="summary-item dismissed">
+                        <h2 id="dismissedCount">0</h2>
+                        <p>Dismissed</p>
+                    </div>
+                    <div class="summary-item pending">
+                        <h2 id="pendingCount">0</h2>
+                        <p>Pending</p>
+                    </div>
+                    <div class="summary-item deans-list">
+                        <h2 id="deansListCount">0</h2>
+                        <p>Dean's List</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Evaluation Form Page -->
+    <div id="evaluationPage" class="page">
+        <div class="header">
+            <div class="container">
+                <div class="header-flex">
+                    <div>
+                        <h1>Student Evaluation</h1>
+                        <p id="evaluationSubtitle">Student Name - ID</p>
+                    </div>
+                    <div class="header-actions">
+                        <button onclick="goBackToStudentList()" class="btn btn-back">← Back to Students</button>
+                        <span id="welcomeMessage4">Welcome, User!</span>
+                        <button onclick="logout()" class="btn btn-logout">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div id="studentProfileCard" class="card">
+                <!-- Student profile will be populated by JavaScript -->
+            </div>
+
+            <div id="academicStandingCard" class="card" style="display: none;">
+                <!-- Academic standing will be populated by JavaScript -->
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Course Grades Evaluation</h2>
+                    <div class="evaluation-actions">
+                        <button id="editGradesBtn" onclick="toggleEdit()" class="btn btn-primary">Edit Grades</button>
+                        <div id="editActions" style="display: none;">
+                            <button onclick="addNewSubject()" class="btn btn-success">Add Subject</button>
+                            <button onclick="saveChanges()" class="btn btn-success">Save Changes</button>
+                            <button onclick="cancelEdit()" class="btn btn-secondary">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="gradesTableContainer">
+                    <!-- Grades table will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>CELA Academic Standing Rules</h3>
+                <div class="rules-grid">
+                    <div class="rule-card passed">
+                        <h4>PASSED</h4>
+                        <p>GPA ≤ 2.25</p>
+                    </div>
+                    <div class="rule-card retained">
+                        <h4>RETAINED</h4>
+                        <p>2.25 < GPA ≤ 2.50</p>
+                    </div>
+                    <div class="rule-card dismissed">
+                        <h4>DISMISSED</h4>
+                        <p>GPA > 2.50</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Page -->
+    <div id="resultsPage" class="page">
+        <div class="header">
+            <div class="container">
+                <div class="header-flex">
+                    <div>
+                        <h1>Evaluation Results</h1>
+                        <p>Academic standing results for all students</p>
+                    </div>
+                    <div class="header-actions">
+                        <button onclick="showDashboard()" class="btn btn-back">← Dashboard</button>
+                        <span id="welcomeMessage5">Welcome, User!</span>
+                        <button onclick="logout()" class="btn btn-logout">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="card">
+                <h2>Overall Statistics</h2>
+                <div class="statistics-grid">
+                    <div class="stat-card total">
+                        <h2 id="totalStudents">0</h2>
+                        <p>Total Students</p>
+                    </div>
+                    <div class="stat-card passed">
+                        <h2 id="totalPassed">0</h2>
+                        <p>Passed</p>
+                        <small id="passedPercent">(0%)</small>
+                    </div>
+                    <div class="stat-card retained">
+                        <h2 id="totalRetained">0</h2>
+                        <p>Retained</p>
+                        <small id="retainedPercent">(0%)</small>
+                    </div>
+                    <div class="stat-card dismissed">
+                        <h2 id="totalDismissed">0</h2>
+                        <p>Dismissed</p>
+                        <small id="dismissedPercent">(0%)</small>
+                    </div>
+                    <div class="stat-card pending">
+                        <h2 id="totalPending">0</h2>
+                        <p>Pending</p>
+                        <small id="pendingPercent">(0%)</small>
+                    </div>
+                    <div class="stat-card deans-list">
+                        <h2 id="totalDeansList">0</h2>
+                        <p>Dean's List</p>
+                        <small id="deansListPercent">(0%)</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Results List</h2>
+                    <button onclick="exportResults()" class="btn btn-success">📊 Export CSV</button>
+                </div>
+
+                <div class="filter-container">
+                    <button onclick="filterResults('all')" class="filter-btn active" data-filter="all">All</button>
+                    <button onclick="filterResults('passed')" class="filter-btn" data-filter="passed">Passed</button>
+                    <button onclick="filterResults('retained')" class="filter-btn" data-filter="retained">Retained</button>
+                    <button onclick="filterResults('dismissed')" class="filter-btn" data-filter="dismissed">Dismissed</button>
+                </div>
+
+                <input type="text" id="resultsSearch" placeholder="🔍 Search by name, ID, year level, or course..." class="search-bar">
+
+                <div id="resultsTableContainer">
+                    <!-- Results table will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Academic Standing Criteria (CELA)</h3>
+                <div class="criteria-grid">
+                    <div class="criteria-card passed">
+                        <h4>✅ PASSED</h4>
+                        <p class="gpa-range">GPA ≤ 2.25</p>
+                        <p class="description">Student meets academic standards and can continue in current program without restrictions.</p>
+                    </div>
+                    
+                    <div class="criteria-card retained">
+                        <h4>⚠️ RETAINED</h4>
+                        <p class="gpa-range">2.25 < GPA ≤ 2.50</p>
+                        <p class="description">Student can remain in CELA but may need to change major or take remedial actions.</p>
+                    </div>
+                    
+                    <div class="criteria-card dismissed">
+                        <h4>❌ DISMISSED</h4>
+                        <p class="gpa-range">GPA > 2.50</p>
+                        <p class="description">Student no longer meets CELA academic standards and cannot continue in the department.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
