@@ -37,6 +37,11 @@ function setupEventListeners() {
     if (resultsSearch) {
         resultsSearch.addEventListener('input', handleResultsSearch);
     }
+    
+    const yearSearch = document.getElementById('yearSearch');
+    if (yearSearch) {
+        yearSearch.addEventListener('input', handleYearSearch);
+    }
 }
 
 // Authentication Functions
@@ -111,14 +116,24 @@ function showYearFolders() {
 }
 
 function showStudentList(year) {
-    currentYear = year;
+    // Map academic years to year levels
+    const yearMapping = {
+        '2022-2023': 'First Year',
+        '2021-2022': 'Second Year', 
+        '2020-2021': 'Third Year',
+        '2025-2026': 'Fourth Year'
+    };
+    
+    const yearLevel = yearMapping[year] || year;
+    currentYear = yearLevel;
+    
     showPage('studentListPage');
     updateWelcomeMessages();
     
     // Update page title
     const title = document.getElementById('studentListTitle');
     if (title) {
-        title.textContent = `Students - Academic Year ${year}`;
+        title.textContent = `${yearLevel} Students - Academic Year ${year}`;
     }
     
     // Load and display students
@@ -813,6 +828,126 @@ function handleResultsSearch() {
     
     // Update search results count
     updateResultsSearchCount(filteredStudents.length, database.students.length);
+}
+
+// Year Search Function
+function handleYearSearch() {
+    const searchTerm = document.getElementById('yearSearch').value.toLowerCase();
+    const yearFolders = document.querySelectorAll('.folder-card[onclick*="showStudentList"]');
+    
+    yearFolders.forEach(folder => {
+        const yearText = folder.querySelector('h3').textContent.toLowerCase();
+        const descText = folder.querySelector('p').textContent.toLowerCase();
+        
+        if (yearText.includes(searchTerm) || descText.includes(searchTerm)) {
+            folder.style.display = '';
+        } else {
+            folder.style.display = 'none';
+        }
+    });
+    
+    // Update visible count
+    updateYearSearchCount(searchTerm);
+}
+
+function updateYearSearchCount(searchTerm) {
+    const visibleFolders = document.querySelectorAll('.folder-card[onclick*="showStudentList"]:not([style*="none"])');
+    const totalFolders = document.querySelectorAll('.folder-card[onclick*="showStudentList"]');
+    
+    let countDisplay = document.querySelector('.year-search-count');
+    if (!countDisplay) {
+        const searchContainer = document.querySelector('#yearFoldersPage .search-container');
+        if (searchContainer) {
+            countDisplay = document.createElement('div');
+            countDisplay.className = 'year-search-count';
+            countDisplay.style.cssText = 'font-size: 0.9em; color: #666; margin-top: 5px;';
+            searchContainer.appendChild(countDisplay);
+        }
+    }
+    
+    if (countDisplay) {
+        if (searchTerm === '') {
+            countDisplay.textContent = `Showing all ${totalFolders.length} academic years`;
+        } else {
+            countDisplay.textContent = `Showing ${visibleFolders.length} of ${totalFolders.length} academic years`;
+        }
+    }
+}
+
+// Automated Processing Function
+function startAutomatedProcessing() {
+    // Show confirmation dialog
+    const confirmed = confirm(`🤖 AUTOMATED PROCESSING\n\nThis will:\n✅ Calculate GPA for all students\n✅ Determine academic standing\n✅ Identify Dean's List qualifiers\n✅ Generate comprehensive reports\n\nProcess all ${database.students.length} students?\n\nClick OK to continue.`);
+    
+    if (!confirmed) return;
+    
+    // Show processing indicator
+    const processingDiv = document.createElement('div');
+    processingDiv.innerHTML = `
+        <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 9999; display: flex; align-items: center; justify-content: center;">
+            <div style="background: white; padding: 30px; border-radius: 10px; text-align: center; max-width: 400px;">
+                <div style="font-size: 3em; margin-bottom: 20px;">⚙️</div>
+                <h3>Processing Students...</h3>
+                <p>Calculating GPAs and Academic Standing</p>
+                <div style="width: 100%; background: #f0f0f0; border-radius: 10px; overflow: hidden; margin: 20px 0;">
+                    <div id="progressBar" style="width: 0%; height: 20px; background: linear-gradient(90deg, #4CAF50, #45a049); transition: width 0.3s;"></div>
+                </div>
+                <p id="progressText">0%</p>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(processingDiv);
+    
+    // Process students with animation
+    let processed = 0;
+    const total = database.students.length;
+    
+    const processStudent = (index) => {
+        if (index >= total) {
+            // Processing complete
+            setTimeout(() => {
+                document.body.removeChild(processingDiv);
+                showProcessingResults();
+            }, 1000);
+            return;
+        }
+        
+        const student = database.students[index];
+        
+        // Calculate GPA and status
+        student.gpa = utils.calculateGPA(student.grades);
+        student.status = utils.determineStatus(student.gpa);
+        
+        processed++;
+        const percentage = Math.round((processed / total) * 100);
+        
+        // Update progress
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        if (progressBar) progressBar.style.width = percentage + '%';
+        if (progressText) progressText.textContent = `${percentage}% (${processed}/${total})`;
+        
+        // Process next student after short delay for animation
+        setTimeout(() => processStudent(index + 1), 50);
+    };
+    
+    // Start processing
+    setTimeout(() => processStudent(0), 500);
+}
+
+function showProcessingResults() {
+    const stats = {
+        total: database.students.length,
+        passed: database.students.filter(s => s.status === 'Passed').length,
+        retained: database.students.filter(s => s.status === 'Retained').length,
+        dismissed: database.students.filter(s => s.status === 'Dismissed').length,
+        deansList: database.students.filter(s => utils.isDeansList(s.gpa)).length
+    };
+    
+    alert(`🎉 PROCESSING COMPLETE!\n\n📊 RESULTS SUMMARY:\n\n✅ Total Students: ${stats.total}\n🟢 Passed: ${stats.passed}\n🟡 Retained: ${stats.retained}\n🔴 Dismissed: ${stats.dismissed}\n🏆 Dean's List: ${stats.deansList}\n\n📋 All student records have been updated with:\n• Calculated GPAs\n• Academic Standing Status\n• Dean's List Qualifications\n\nYou can now view the results in the Evaluation Results section.`);
+    
+    // Redirect to results
+    showResults();
 }
 
 function exportResults() {

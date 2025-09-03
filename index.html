@@ -76,39 +76,15 @@
                     <p>View processed results and academic standing status</p>
                 </div>
 
-                <div class="folder-card processing-card">
+                <div class="folder-card processing-card" onclick="startAutomatedProcessing()">
                     <div class="folder-icon">⚙️</div>
                     <h3>Automated Processing</h3>
                     <p>Bulk process grades and generate reports</p>
-                    <small>Click the processing icon in student lists</small>
+                    <small>Click to start automated evaluation</small>
                 </div>
             </div>
 
-            <div class="card">
-                <h2>System Overview</h2>
-                <div class="overview-grid">
-                    <div class="overview-card input-card">
-                        <h3>INPUT</h3>
-                        <p>• Student Profiles</p>
-                        <p>• Final Grades</p>
-                        <p>• Academic Standing Rules</p>
-                    </div>
-                    
-                    <div class="overview-card process-card">
-                        <h3>PROCESS</h3>
-                        <p>• Calculate GPA</p>
-                        <p>• Compare against retention criteria</p>
-                        <p>• Apply academic rules</p>
-                    </div>
-                    
-                    <div class="overview-card output-card">
-                        <h3>OUTPUT</h3>
-                        <p>• Passed Students</p>
-                        <p>• Retained Students</p>
-                        <p>• Dismissed Students</p>
-                    </div>
-                </div>
-            </div>
+
 
             <div class="card">
                 <h2>Academic Standing Rules (CELA)</h2>
@@ -158,7 +134,7 @@
 
         <div class="container">
             <div class="search-container">
-                <input type="text" placeholder="🔍 Search academic years..." class="search-bar">
+                <input type="text" id="yearSearch" placeholder="🔍 Search academic years..." class="search-bar">
             </div>
 
             <div class="processing-info">
@@ -176,21 +152,21 @@
                     <div class="click-info">Click to view students</div>
                 </div>
 
-                <div class="folder-card" onclick="showStudentList('2023-2024')">
+                <div class="folder-card" onclick="showStudentList('2021-2022')">
                     <div class="folder-icon">
                         <img src="public/image/logo1.jpg" alt="ZSCMST Logo" class="year-logo-img">
                     </div>
-                    <h3>2023-2024</h3>
-                    <p>Academic Year 2023-2024</p>
+                    <h3>2021-2022</h3>
+                    <p>Academic Year 2021-2022</p>
                     <div class="click-info">Click to view students</div>
                 </div>
 
-                <div class="folder-card" onclick="showStudentList('2024-2025')">
+                <div class="folder-card" onclick="showStudentList('2020-2021')">
                     <div class="folder-icon">
                         <img src="public/image/logo1.jpg" alt="ZSCMST Logo" class="year-logo-img">
                     </div>
-                    <h3>2024-2025</h3>
-                    <p>Academic Year 2024-2025</p>
+                    <h3>2020-2021</h3>
+                    <p>Academic Year 2020-2021</p>
                     <div class="click-info">Click to view students</div>
                 </div>
 
